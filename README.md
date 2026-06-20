@@ -1,4 +1,3 @@
-
 <h1 align="center">Prarambh-1: Empirical Solid Rocket Motor Architecture 🚀</h1>
 <h4 align="center">High-Fidelity Multi-Physics Simulation, Ballistics, & DSP Telemetry Analysis</h4>
 
@@ -11,6 +10,10 @@
   <img src="https://img.shields.io/badge/Fusion 360-00FFFF?style=for-the-badge&logo=Autodesk&logoColor=black" alt="Fusion 360"/>
 </p>
 
+<p align="center">
+  <img src="https://via.placeholder.com/800x400/0a0a0a/00FFFF?text=[INSERT+STATIC+FIRE+GIF+OR+CAD+RENDER+HERE]" alt="Prarambh-1 Hardware Render" width="100%"/>
+</p>
+
 ---
 
 <details open>
@@ -21,10 +24,11 @@
     <li><a href="#-theoretical-ballistics--thermodynamics">Theoretical Ballistics & Thermodynamics</a></li>
     <li><a href="#-hardware-fabrication--structural-integrity">Hardware Fabrication & Structural Integrity</a></li>
     <li><a href="#-data-acquisition-daq--signal-processing">Data Acquisition (DAQ) & Signal Processing</a></li>
-    <li><a href="#-repository-architecture">Repository Architecture</a></li>
+    <li><a href="#-repository-architecture">Repository Architecture & CI/CD</a></li>
     <li><a href="#-empirical-validation-matrix-14-iteration-log">Empirical Validation Matrix (14-Iteration Log)</a></li>
     <li><a href="#-deployment--reproducibility">Deployment & Reproducibility</a></li>
     <li><a href="#️-team-architecture--project-jericho">Team Architecture & Project Jericho</a></li>
+    <li><a href="#-academic-trajectory">Academic Trajectory</a></li>
     <li><a href="#-academic-citation">Academic Citation</a></li>
   </ol>
 </details>
@@ -113,7 +117,7 @@ Raw static fire telemetry is inherently noisy due to mechanical resonance, thrus
 
 ---
 
-### 🗄️ REPOSITORY ARCHITECTURE
+### 🗄️ REPOSITORY ARCHITECTURE & CI/CD
 
 <div align="justify">
 <i>Structured for absolute peer-reviewed reproducibility, establishing a transparent pipeline from initial 3D simulation to automated data-parsing.</i>
@@ -122,6 +126,7 @@ Raw static fire telemetry is inherently noisy due to mechanical resonance, thrus
 ```text
 📁 Prarambh-1-Solid-Motor/
 │
+├── 📁 .github/workflows/     # CI/CD: Automated linting and tests for Python DSP scripts
 ├── 📁 CAD_Models/            # Hardware boundaries, nozzle geometries (STEP/SLDPRT)
 ├── 📁 simulations/           # Native multi-physics profiles (.om, .ork)
 ├── 📁 data/                  # Load-cell telemetry (Note: Files >100MB excluded via .gitignore)
@@ -135,4 +140,4 @@ Raw static fire telemetry is inherently noisy due to mechanical resonance, thrus
 │
 ├── 📁 docs/                  # Mathematical derivations and SOPs
 ├── requirements.txt          # Python environment dependencies
-└── README.md                 # Main propulsion dossier (You are here)
+└── README.md                 # Main propulsion dossier
