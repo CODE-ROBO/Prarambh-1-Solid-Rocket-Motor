@@ -1,13 +1,7 @@
-<div align="center">
-  <code>
-  [SYS_INIT]... PROPULSION_LABORATORY_ACTIVE<br>
-  [DESIGNATION]... PRARAMBH-1_SOLID_MOTOR_ARCHIVE<br>
-  [STATUS]... STATIC_FIRE_VALIDATED // CATO_AVOIDED
-  </code>
-</div>
+
 
 <h1 align="center">Prarambh-1: Empirical Solid Rocket Motor Architecture 🚀</h1>
-<h4 align="center">High-Fidelity Multi-Physics Simulation & Applied Hardware Fabrication</h4>
+<h4 align="center">High-Fidelity Multi-Physics Simulation, Ballistics, & DSP Telemetry Analysis</h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/OpenMotor-8B0000?style=for-the-badge&logo=rocket&logoColor=white" />
@@ -15,78 +9,139 @@
   <img src="https://img.shields.io/badge/MATLAB-FFD700?style=for-the-badge&logo=mathworks&logoColor=black" />
   <img src="https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=black" />
   <img src="https://img.shields.io/badge/SolidWorks-00FFFF?style=for-the-badge&logo=solidworks&logoColor=black" />
+  <img src="https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" />
 </p>
 
 ---
 
-### 📋 SYSTEM DATASHEET & ENGINEERING SPECIFICATIONS
-
-| Metric | Specification | Engineering Objective |
-| :--- | :--- | :--- |
-| **Propellant Base** | KNSB (Potassium Nitrate / Sorbitol) | High specific impulse ($I_{sp}$) with castable geometry. |
-| **Chemical Matrix** | $64\%$ $KNO_3$ \| $35\%$ $C_6H_{14}O_6$ \| $1\%$ $Fe_2O_3$ | Optimized burn rate ($r$) and thermal stability. |
-| **Grain Architecture** | Inhibited BATES Cylindrical | Maintain neutral thrust curve over full burn duration. |
-| **Core Software** | OpenMotor, OpenRocket, MATLAB | Multi-physics modeling and transient pressure analysis. |
-| **Project Status** | **VALIDATED** (14 Iterations) | Flight-ready for sounding rocket integration (Project Jericho). |
+<details open>
+  <summary><b>📑 DIRECTORY TERMINAL (TABLE OF CONTENTS)</b></summary>
+  <ol>
+    <li><a href="#-executive-propulsion-overview">Executive Propulsion Overview</a></li>
+    <li><a href="#-system-datasheet--engineering-targets">System Datasheet & Engineering Targets</a></li>
+    <li><a href="#-theoretical-ballistics--thermodynamics">Theoretical Ballistics & Thermodynamics</a></li>
+    <li><a href="#-hardware-fabrication--structural-integrity">Hardware Fabrication & Structural Integrity</a></li>
+    <li><a href="#-data-acquisition-daq--signal-processing">Data Acquisition (DAQ) & Signal Processing</a></li>
+    <li><a href="#-repository-architecture">Repository Architecture</a></li>
+    <li><a href="#-empirical-validation-matrix-14-iteration-log">Empirical Validation Matrix (14-Iteration Log)</a></li>
+    <li><a href="#-deployment--reproducibility">Deployment & Reproducibility</a></li>
+    <li><a href="#-strategic-roadmap--project-jericho-integration">Strategic Roadmap (Project Jericho Integration)</a></li>
+    <li><a href="#️-safety--compliance-declaration">Safety & Compliance</a></li>
+  </ol>
+</details>
 
 ---
 
 ### 🌐 EXECUTIVE PROPULSION OVERVIEW
-<div align="justify">
-This repository documents the structural engineering, mathematical modeling, and empirical optimization of the <b>Prarambh-1</b> solid rocket motor. Engineered as the foundational propulsion unit for high-altitude sounding rockets, the overriding objective was to establish a predictable, high-performance burn profile while preventing catastrophic structural failure under extreme internal thermal and pressure loads.
 
-Rejecting purely theoretical models, this motor was developed using a rigorous, first-principles hardware methodology. Across <b>14 empirical testing iterations</b>, chemical purity levels, grain geometries, and casting parameters were systematically isolated and optimized to perfectly align physical static-fire load-cell telemetry with high-fidelity computational simulations.
+<div align="justify">
+This repository archives the structural engineering parameters, mathematical modeling scripts, and empirical data analysis pipelines for the <b>Prarambh-1</b> solid rocket motor. Engineered as a foundational analytical model for high-altitude sounding rockets, the overriding objective was to simulate, track, and validate a predictable, high-performance burn profile.
+
+By rejecting purely theoretical assumptions, the internal ballistics were validated through a rigorous data-driven, hardware-in-the-loop methodology. Across <b>14 empirical static-fire data sets</b>, raw telemetry was systematically ingested, passed through digital signal processing (DSP) filters, and mapped to perfectly align physical force readouts with high-fidelity computational simulations from OpenMotor.
 </div>
 
 ---
 
-### 🧪 PROPELLANT CHEMISTRY & INTERNAL BALLISTICS
-<div align="justify">
-Prarambh-1 utilizes a highly optimized Potassium Nitrate-Sorbitol (KNSB) propellant matrix. To ensure safe operation and maximum efficiency, the transient chamber pressure ($P_c$) and burn surface area evolution were modeled. The linear regression rate ($r$) is characterized by Saint Robert’s Law:
-</div>
-
-<p align="center">
-  $r = a \cdot P_c^n$
-</p>
+### 📋 SYSTEM DATASHEET & ENGINEERING TARGETS
 
 <div align="justify">
-Through rigorous static fire testing, the burn rate coefficients ($a$ and $n$) were empirically tuned to match the actual performance of the 64:35:1 matrix. Overall engine efficiency is dynamically evaluated by calculating the Specific Impulse ($I_{sp}$) from load-cell thrust data:
+The architecture bridges the critical gap between theoretical thermodynamic modeling, multiphysics flight simulation, and empirical data validation.
 </div>
 
-<p align="center">
-  $I_{sp} = \frac{\int_{0}^{t} F(t) \, dt}{m_p \cdot g_0}$
-</p>
+| Subsystem | Specification | Engineering Objective |
+| :--- | :--- | :--- |
+| **Propellant Matrix** | $64\%$ $KNO_3$ \| $35\%$ $C_6H_{14}O_6$ \| $1\%$ $Fe_2O_3$ | Achieve optimized linear burn rate ($r$) and thermodynamic stability. |
+| **Grain Architecture** | Inhibited BATES Cylindrical | Maintain neutral thrust curve over the full temporal burn duration. |
+| **Nozzle Expansion** | Convergent-Divergent (De Laval) | Optimize exhaust gas velocity ($v_e$) at sea-level ambient conditions. |
+| **Telemetry DAQ** | High-Frequency Load Cell + 24-bit ADC | High-resolution temporal capture of transient pressure anomalies. |
+| **Software Pipeline** | Python (Pandas/SciPy), MATLAB, OpenMotor | End-to-end signal processing and empirical-to-theoretical overlay. |
+| **Safety Factor ($\eta$)**| > 2.5x Peak Operating Pressure | Absolute mitigation of Catastrophic Failure (CATO) scenarios. |
+| **Project Status** | **VALIDATED** (14 Iterations) | Computational models cleared for future aerodynamic integration. |
+
+---
+
+### 🧪 THEORETICAL BALLISTICS & THERMODYNAMICS
+
+<div align="justify">
+To ensure mathematical precision, the transient chamber pressure ($P_c$) and burn surface area evolution were rigorously modeled using foundational gas dynamics. The linear regression rate ($r$) is governed by Saint Robert’s Law:
+</div>
+
+$$r = a \cdot P_c^n$$
+
+<div align="justify">
+Through the analysis of static fire data, the empirical burn rate coefficient ($a$) and pressure exponent ($n$) were isolated. The theoretical efficiency of the combustion process is measured via its Characteristic Velocity ($c^*$), defining performance independent of nozzle expansion geometries:
+</div>
+
+$$c^* = \frac{P_c \cdot A_t}{\dot{m}}$$
+
+<div align="justify">
+Furthermore, the physical nozzle's efficiency in converting thermal energy into kinetic energy is modeled using the Thrust Coefficient ($C_f$), accounting for specific heat ratios ($\gamma$) and pressure differentials:
+</div>
+
+$$C_f = \sqrt{\frac{2\gamma^2}{\gamma-1}\left(\frac{2}{\gamma+1}\right)^{\frac{\gamma+1}{\gamma-1}}\left[1-\left(\frac{P_e}{P_c}\right)^{\frac{\gamma-1}{\gamma}}\right]} + \left(\frac{P_e - P_a}{P_c}\right)\frac{A_e}{A_t}$$
+
+<div align="justify">
+Overall macroscopic system efficiency is dynamically evaluated by computing the Specific Impulse ($I_{sp}$) by integrating the raw thrust curve ($F$) over the total burn time ($t$):
+</div>
+
+$$I_{sp} = \frac{\int_{0}^{t} F(t) \, dt}{m_p \cdot g_0}$$
 
 ---
 
 ### ⚙️ HARDWARE FABRICATION & STRUCTURAL INTEGRITY
+
 <div align="justify">
-To withstand extreme thermal gradients and transient pressure spikes, the hardware architecture demands strict industrial tolerances:
+To withstand extreme thermal gradients and transient pressure spikes, the hardware architecture was designed using strict industrial pressure vessel tolerances and rapid-prototyping workflows.
 </div>
 
-* 🛡️ **Motor Casing Dynamics:** Analyzed for critical burst pressure ($\sigma_{burst}$) utilizing primary hoop stress calculations to establish a strict structural safety factor ($\eta$) exceeding peak expected chamber pressure.
-* 🌪️ **Nozzle Expansion Geometry:** Convergent-divergent (De Laval) thermodynamic expansion ratio ($A_e/A_t$) was analytically derived and precision-machined to optimize exhaust gas velocity at sea-level ambient conditions.
-* 🔥 **Thermal Insulation:** Strategic implementation of internal liners to mitigate casing heat-soak and prevent premature structural yield during the burn phase.
+* 🛡️ **Motor Casing Dynamics:** Analyzed for critical burst pressure ($\sigma_{burst}$) utilizing Barlow's formula for primary hoop stress to establish a strict structural safety factor exceeding the peak expected chamber pressure. Precision-machined for optimal strength-to-weight ratios.
+* 🌪️ **Nozzle Expansion Geometry:** The thermodynamic expansion ratio ($A_e/A_t$) was analytically derived to match exit pressure ($P_e$) with ambient pressure ($P_a$), maximizing thrust efficiency and preventing flow separation or shock diamond inefficiencies inside the bell.
+* ⚠️ **Thermal Inhibition & Ablation:** Strategic implementation of non-combustible internal liners to mitigate casing heat-soak. The liner thickness was calculated based on the maximum anticipated burn time to prevent premature structural yield during the combustion phase.
+* 🛠️ **Test Stand Architecture:** Engineered a multi-axis thrust containment stand utilizing heavy-gauge steel, capable of withstanding lateral vibration and axial thrust loads exceeding the motor's theoretical maximum.
 
 ---
 
-### 🗄️ REPOSITORY ARCHITECTURE (DEPLOYMENT READY)
+### 📡 DATA ACQUISITION (DAQ) & SIGNAL PROCESSING
+
 <div align="justify">
-<i>Structured for absolute peer-reviewed reproducibility, establishing a transparent pipeline from raw CAD to automated data-parsing.</i>
+Raw static fire telemetry is inherently noisy due to mechanical resonance, thrust stand vibrations, and electromagnetic interference (EMI). A core component of this repository is the custom digital signal processing (DSP) pipeline engineered to extract clean thrust metrics:
+</div>
+
+1. **High-Resolution Hardware Ingestion:** Raw CSV data is captured via industrial S-type load cells processed through high-precision ADCs. The sampling rate was engineered to adhere to the Nyquist sampling theorem for capturing micro-millisecond transient pressure spikes.
+2. **Algorithmic Filtering Pipeline (Python):** * **Fast Fourier Transform (FFT):** Applied via `SciPy` to identify and isolate the frequencies of physical test-stand resonance.
+   * **Butterworth Low-Pass Filter:** Implemented to attenuate the isolated high-frequency mechanical noise without degrading the integrity or dampening the amplitude of the primary thrust curve.
+3. **Comparative Analysis Layer (MATLAB):** The cleaned data arrays are automatically ingested into MATLAB, calculating standard deviations, impulse integrations, and generating comparative visual overlays against the theoretical OpenMotor `.om` curves.
+
+---
+
+### 🗄️ REPOSITORY ARCHITECTURE
+
+<div align="justify">
+<i>Structured for absolute peer-reviewed reproducibility, establishing a transparent pipeline from initial 3D simulation to automated data-parsing.</i>
 </div>
 
 ```text
 📁 Prarambh-1-Solid-Motor/
 │
-├── 📁 CAD_Models/            # Hardware shell, nozzle geometries, and retention rings (STEP/SLDPRT)
-├── 📁 simulations/           # Native OpenMotor (.om) and OpenRocket (.ork) flight profiles
+├── 📁 CAD_Models/            # Hardware boundaries, nozzle geometries, and retention rings (STEP/SLDPRT)
+│   ├── motor_casing.step
+│   └── convergent_nozzle.SLDPRT
+│
+├── 📁 simulations/           # Native multi-physics profiles
+│   ├── internal_ballistics.om
+│   └── flight_dynamics.ork
+│
 ├── 📁 data/                  # Load-cell telemetry (Note: Files >100MB excluded via .gitignore)
 │   ├── raw_static_fire/      # Unprocessed CSV pressure/thrust transients
-│   └── empirical_logs/       # Chemical variance and environmental tracking matrices
+│   └── empirical_logs/       # Matrix logs for all 14 empirical test iterations
 │
 ├── 📁 src/                   # Signal processing and validation pipeline
-│   ├── parse_loadcell.py     # Noise filtering and signal smoothing for raw telemetry
+│   ├── filter_telemetry.py   # Python DSP script (FFT and Butterworth filtering)
+│   ├── calculate_isp.py      # Numerical integration script for total impulse
 │   └── compare_thrust.m      # MATLAB script overlaying empirical data onto OpenMotor targets
 │
-├── 📁 docs/                  # Structural safety calculations, expansion derivations, and SOPs
+├── 📁 docs/                  # Mathematical derivations, structural models, and DAQ architecture
+│   └── SOP_Static_Fire.pdf   # Standard Operating Procedure for safe testing
+│
+├── requirements.txt          # Python environment dependencies
 └── README.md                 # Main propulsion dossier (You are here)
