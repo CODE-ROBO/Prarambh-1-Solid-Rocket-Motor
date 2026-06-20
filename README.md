@@ -1,15 +1,17 @@
 
-
 <h1 align="center">Prarambh-1: Empirical Solid Rocket Motor Architecture 🚀</h1>
 <h4 align="center">High-Fidelity Multi-Physics Simulation, Ballistics, & DSP Telemetry Analysis</h4>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/OpenMotor-8B0000?style=for-the-badge&logo=rocket&logoColor=white" />
-  <img src="https://img.shields.io/badge/OpenRocket-8B0000?style=for-the-badge&logo=rocket&logoColor=white" />
-  <img src="https://img.shields.io/badge/MATLAB-FFD700?style=for-the-badge&logo=mathworks&logoColor=black" />
-  <img src="https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=black" />
-  <img src="https://img.shields.io/badge/SolidWorks-00FFFF?style=for-the-badge&logo=solidworks&logoColor=black" />
-  <img src="https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" />
+  <img src="https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge" alt="Build Status"/>
+  <img src="https://img.shields.io/badge/Status-Validated-success?style=for-the-badge" alt="Validation Status"/>
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License"/>
+  <br>
+  <img src="https://img.shields.io/badge/OpenMotor-8B0000?style=for-the-badge&logo=rocket&logoColor=white" alt="OpenMotor"/>
+  <img src="https://img.shields.io/badge/OpenRocket-8B0000?style=for-the-badge&logo=rocket&logoColor=white" alt="OpenRocket"/>
+  <img src="https://img.shields.io/badge/MATLAB-FFD700?style=for-the-badge&logo=mathworks&logoColor=black" alt="MATLAB"/>
+  <img src="https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=black" alt="Python"/>
+  <img src="https://img.shields.io/badge/SolidWorks-00FFFF?style=for-the-badge&logo=solidworks&logoColor=black" alt="SolidWorks"/>
 </p>
 
 ---
@@ -25,8 +27,8 @@
     <li><a href="#-repository-architecture">Repository Architecture</a></li>
     <li><a href="#-empirical-validation-matrix-14-iteration-log">Empirical Validation Matrix (14-Iteration Log)</a></li>
     <li><a href="#-deployment--reproducibility">Deployment & Reproducibility</a></li>
-    <li><a href="#-strategic-roadmap--project-jericho-integration">Strategic Roadmap (Project Jericho Integration)</a></li>
-    <li><a href="#️-safety--compliance-declaration">Safety & Compliance</a></li>
+    <li><a href="#️-team-architecture--project-jericho">Team Architecture & Project Jericho</a></li>
+    <li><a href="#-academic-citation">Academic Citation</a></li>
   </ol>
 </details>
 
@@ -94,9 +96,9 @@ $$I_{sp} = \frac{\int_{0}^{t} F(t) \, dt}{m_p \cdot g_0}$$
 To withstand extreme thermal gradients and transient pressure spikes, the hardware architecture was designed using strict industrial pressure vessel tolerances and rapid-prototyping workflows.
 </div>
 
-* 🛡️ **Motor Casing Dynamics:** Analyzed for critical burst pressure ($\sigma_{burst}$) utilizing Barlow's formula for primary hoop stress to establish a strict structural safety factor exceeding the peak expected chamber pressure. Precision-machined for optimal strength-to-weight ratios.
-* 🌪️ **Nozzle Expansion Geometry:** The thermodynamic expansion ratio ($A_e/A_t$) was analytically derived to match exit pressure ($P_e$) with ambient pressure ($P_a$), maximizing thrust efficiency and preventing flow separation or shock diamond inefficiencies inside the bell.
-* ⚠️ **Thermal Inhibition & Ablation:** Strategic implementation of non-combustible internal liners to mitigate casing heat-soak. The liner thickness was calculated based on the maximum anticipated burn time to prevent premature structural yield during the combustion phase.
+* 🛡️ **Motor Casing Dynamics:** Analyzed for critical burst pressure ($\sigma_{burst}$) utilizing Barlow's formula for primary hoop stress to establish a strict structural safety factor exceeding the peak expected chamber pressure. 
+* 🌪️ **Nozzle Expansion Geometry:** The thermodynamic expansion ratio ($A_e/A_t$) was analytically derived to match exit pressure ($P_e$) with ambient pressure ($P_a$), maximizing thrust efficiency and preventing flow separation.
+* ⚠️ **Thermal Inhibition & Ablation:** Strategic implementation of non-combustible internal liners to mitigate casing heat-soak. The liner thickness was calculated based on the maximum anticipated burn time.
 * 🛠️ **Test Stand Architecture:** Engineered a multi-axis thrust containment stand utilizing heavy-gauge steel, capable of withstanding lateral vibration and axial thrust loads exceeding the motor's theoretical maximum.
 
 ---
@@ -123,14 +125,8 @@ Raw static fire telemetry is inherently noisy due to mechanical resonance, thrus
 ```text
 📁 Prarambh-1-Solid-Motor/
 │
-├── 📁 CAD_Models/            # Hardware boundaries, nozzle geometries, and retention rings (STEP/SLDPRT)
-│   ├── motor_casing.step
-│   └── convergent_nozzle.SLDPRT
-│
-├── 📁 simulations/           # Native multi-physics profiles
-│   ├── internal_ballistics.om
-│   └── flight_dynamics.ork
-│
+├── 📁 CAD_Models/            # Hardware boundaries, nozzle geometries (STEP/SLDPRT)
+├── 📁 simulations/           # Native multi-physics profiles (.om, .ork)
 ├── 📁 data/                  # Load-cell telemetry (Note: Files >100MB excluded via .gitignore)
 │   ├── raw_static_fire/      # Unprocessed CSV pressure/thrust transients
 │   └── empirical_logs/       # Matrix logs for all 14 empirical test iterations
@@ -140,8 +136,6 @@ Raw static fire telemetry is inherently noisy due to mechanical resonance, thrus
 │   ├── calculate_isp.py      # Numerical integration script for total impulse
 │   └── compare_thrust.m      # MATLAB script overlaying empirical data onto OpenMotor targets
 │
-├── 📁 docs/                  # Mathematical derivations, structural models, and DAQ architecture
-│   └── SOP_Static_Fire.pdf   # Standard Operating Procedure for safe testing
-│
+├── 📁 docs/                  # Mathematical derivations and SOPs
 ├── requirements.txt          # Python environment dependencies
 └── README.md                 # Main propulsion dossier (You are here)
