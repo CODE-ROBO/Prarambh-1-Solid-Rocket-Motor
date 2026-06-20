@@ -24,12 +24,15 @@
     <li><a href="#-theoretical-ballistics--thermodynamics">Theoretical Ballistics & Thermodynamics</a></li>
     <li><a href="#-hardware-fabrication--structural-integrity">Hardware Fabrication & Structural Integrity</a></li>
     <li><a href="#-data-acquisition-daq--signal-processing">Data Acquisition (DAQ) & Signal Processing</a></li>
-    <li><a href="#-repository-architecture">Repository Architecture & CI/CD</a></li>
+    <li><a href="#-repository-architecture--cicd">Repository Architecture & CI/CD</a></li>
     <li><a href="#-empirical-validation-matrix-14-iteration-log">Empirical Validation Matrix (14-Iteration Log)</a></li>
+    <li><a href="#-system-requirements--dependencies">System Requirements & Dependencies</a></li>
     <li><a href="#-deployment--reproducibility">Deployment & Reproducibility</a></li>
     <li><a href="#️-team-architecture--project-jericho">Team Architecture & Project Jericho</a></li>
     <li><a href="#-academic-trajectory">Academic Trajectory</a></li>
     <li><a href="#-academic-citation">Academic Citation</a></li>
+    <li><a href="#-contribution--open-source-protocol">Contribution & Open Source Protocol</a></li>
+    <li><a href="#-license--legal">License & Legal</a></li>
   </ol>
 </details>
 
