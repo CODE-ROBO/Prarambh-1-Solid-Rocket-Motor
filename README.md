@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Ansys-8B0000?style=for-the-badge&logo=Ansys&logoColor=white" alt="Ansys"/>
   <img src="https://img.shields.io/badge/MATLAB-FFD700?style=for-the-badge&logo=mathworks&logoColor=black" alt="MATLAB"/>
   <img src="https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=black" alt="Python"/>
-  <img src="https://img.shields.io/badge/Fusion 360-00FFFF?style=for-the-badge&logo=Autodesk&logoColor=black" alt="Fusion 360"/>
+  <img src="https://img.shields.io/badge/Fusion_360-00FFFF?style=for-the-badge&logo=Autodesk&logoColor=black" alt="Fusion 360"/>
 </p>
 
 <p align="center">
@@ -19,26 +19,23 @@
 <details open>
   <summary><b>📑 DIRECTORY TERMINAL (TABLE OF CONTENTS)</b></summary>
   <ol>
-    <li><a href="#-executive-propulsion-overview">Executive Propulsion Overview</a></li>
-    <li><a href="#-system-datasheet--engineering-targets">System Datasheet & Engineering Targets</a></li>
-    <li><a href="#-theoretical-ballistics--thermodynamics">Theoretical Ballistics & Thermodynamics</a></li>
-    <li><a href="#-hardware-fabrication--structural-integrity">Hardware Fabrication & Structural Integrity</a></li>
-    <li><a href="#-data-acquisition-daq--signal-processing">Data Acquisition (DAQ) & Signal Processing</a></li>
-    <li><a href="#-repository-architecture--cicd">Repository Architecture & CI/CD</a></li>
-    <li><a href="#-empirical-validation-matrix-14-iteration-log">Empirical Validation Matrix (14-Iteration Log)</a></li>
-    <li><a href="#-system-requirements--dependencies">System Requirements & Dependencies</a></li>
-    <li><a href="#-deployment--reproducibility">Deployment & Reproducibility</a></li>
-    <li><a href="#️-team-architecture--project-jericho">Team Architecture & Project Jericho</a></li>
-    <li><a href="#-academic-trajectory">Academic Trajectory</a></li>
-    <li><a href="#-academic-citation">Academic Citation</a></li>
-    <li><a href="#-contribution--open-source-protocol">Contribution & Open Source Protocol</a></li>
-    <li><a href="#-license--legal">License & Legal</a></li>
+    <li><a href="#overview">Executive Propulsion Overview</a></li>
+    <li><a href="#datasheet">System Datasheet & Engineering Targets</a></li>
+    <li><a href="#thermodynamics">Theoretical Ballistics & Thermodynamics</a></li>
+    <li><a href="#hardware">Hardware Fabrication & Bill of Materials</a></li>
+    <li><a href="#daq">Data Acquisition (DAQ) & Signal Processing</a></li>
+    <li><a href="#architecture">Repository Architecture & CI/CD</a></li>
+    <li><a href="#validation">Empirical Validation Matrix (14-Iteration Log)</a></li>
+    <li><a href="#deployment">Deployment & Reproducibility</a></li>
+    <li><a href="#team">Team Architecture & Project Jericho</a></li>
+    <li><a href="#academic">Academic Trajectory</a></li>
+    <li><a href="#citation">Academic Citation</a></li>
   </ol>
 </details>
 
 ---
 
-### 🌐 EXECUTIVE PROPULSION OVERVIEW
+### <a id="overview"></a>🌐 EXECUTIVE PROPULSION OVERVIEW
 
 <div align="justify">
 This repository archives the structural engineering parameters, mathematical modeling scripts, and empirical data analysis pipelines for the <b>Prarambh-1</b> solid rocket motor. Engineered as a foundational analytical model for high-altitude sounding rockets, the overriding objective was to simulate, track, and validate a predictable, high-performance burn profile.
@@ -48,7 +45,7 @@ By rejecting purely theoretical assumptions, the internal ballistics were valida
 
 ---
 
-### 📋 SYSTEM DATASHEET & ENGINEERING TARGETS
+### <a id="datasheet"></a>📋 SYSTEM DATASHEET & ENGINEERING TARGETS
 
 <div align="justify">
 The architecture bridges the critical gap between theoretical thermodynamic modeling, multiphysics flight simulation, and empirical data validation.
@@ -66,7 +63,7 @@ The architecture bridges the critical gap between theoretical thermodynamic mode
 
 ---
 
-### 🧪 THEORETICAL BALLISTICS & THERMODYNAMICS
+### <a id="thermodynamics"></a>🧪 THEORETICAL BALLISTICS & THERMODYNAMICS
 
 <div align="justify">
 To ensure mathematical precision, the transient chamber pressure ($P_c$) and burn surface area evolution were rigorously modeled using foundational gas dynamics. The linear regression rate ($r$) is governed by Saint Robert’s Law:
@@ -94,7 +91,7 @@ $$I_{sp} = \frac{\int_{0}^{t} F(t) \, dt}{m_p \cdot g_0}$$
 
 ---
 
-### ⚙️ HARDWARE FABRICATION & STRUCTURAL INTEGRITY
+### <a id="hardware"></a>⚙️ HARDWARE FABRICATION & BILL OF MATERIALS
 
 <div align="justify">
 To withstand extreme thermal gradients and transient pressure spikes, the hardware architecture was designed using strict industrial pressure vessel tolerances and rapid-prototyping workflows.
@@ -103,11 +100,19 @@ To withstand extreme thermal gradients and transient pressure spikes, the hardwa
 * 🛡️ **Motor Casing Dynamics:** Analyzed for critical burst pressure ($\sigma_{burst}$) utilizing Barlow's formula for primary hoop stress to establish a strict structural safety factor exceeding the peak expected chamber pressure. 
 * 🌪️ **Nozzle Expansion Geometry:** The thermodynamic expansion ratio ($A_e/A_t$) was analytically derived to match exit pressure ($P_e$) with ambient pressure ($P_a$), maximizing thrust efficiency and preventing flow separation.
 * ⚠️ **Thermal Inhibition & Ablation:** Strategic implementation of non-combustible internal liners to mitigate casing heat-soak. The liner thickness was calculated based on the maximum anticipated burn time.
-* 🛠️ **Test Stand Architecture:** Engineered a multi-axis thrust containment stand utilizing heavy-gauge steel, capable of withstanding lateral vibration and axial thrust loads exceeding the motor's theoretical maximum.
+
+**Primary Hardware Bill of Materials (BOM):**
+| Component | Material / Specification | Subsystem |
+| :--- | :--- | :--- |
+| **Primary Casing** | 6061-T6 Aluminum Alloy | Pressure Vessel |
+| **Convergent Nozzle** | Precision Machined Graphite | Thermodynamics / Exhaust |
+| **Load Cell Sensor** | S-Type 100kg Industrial Strain Gauge | DAQ Telemetry |
+| **Signal Amplifier** | HX711 (24-bit ADC) | DAQ Telemetry |
+| **Test Stand Chassis** | Heavy-Gauge Welded Steel | Structural Containment |
 
 ---
 
-### 📡 DATA ACQUISITION (DAQ) & SIGNAL PROCESSING
+### <a id="daq"></a>📡 DATA ACQUISITION (DAQ) & SIGNAL PROCESSING
 
 <div align="justify">
 Raw static fire telemetry is inherently noisy due to mechanical resonance, thrust stand vibrations, and electromagnetic interference (EMI). A core component of this repository is the custom digital signal processing (DSP) pipeline engineered to extract clean thrust metrics:
@@ -120,7 +125,7 @@ Raw static fire telemetry is inherently noisy due to mechanical resonance, thrus
 
 ---
 
-### 🗄️ REPOSITORY ARCHITECTURE & CI/CD
+### <a id="architecture"></a>🗄️ REPOSITORY ARCHITECTURE & CI/CD
 
 <div align="justify">
 <i>Structured for absolute peer-reviewed reproducibility, establishing a transparent pipeline from initial 3D simulation to automated data-parsing.</i>
