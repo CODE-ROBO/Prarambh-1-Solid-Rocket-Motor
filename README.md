@@ -2,16 +2,13 @@
 <h1 align="center">Prarambh-1: Empirical Solid Rocket Motor Architecture 🚀</h1>
 <h4 align="center">High-Fidelity Multi-Physics Simulation, Ballistics, & DSP Telemetry Analysis</h4>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge" alt="Build Status"/>
-  <img src="https://img.shields.io/badge/Status-Validated-success?style=for-the-badge" alt="Validation Status"/>
-  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License"/>
+<p>
   <br>
   <img src="https://img.shields.io/badge/OpenMotor-8B0000?style=for-the-badge&logo=rocket&logoColor=white" alt="OpenMotor"/>
-  <img src="https://img.shields.io/badge/OpenRocket-8B0000?style=for-the-badge&logo=rocket&logoColor=white" alt="OpenRocket"/>
+  <img src="https://img.shields.io/badge/Ansys-8B0000?style=for-the-badge&logo=Ansys&logoColor=white" alt="Ansys"/>
   <img src="https://img.shields.io/badge/MATLAB-FFD700?style=for-the-badge&logo=mathworks&logoColor=black" alt="MATLAB"/>
   <img src="https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=black" alt="Python"/>
-  <img src="https://img.shields.io/badge/SolidWorks-00FFFF?style=for-the-badge&logo=solidworks&logoColor=black" alt="SolidWorks"/>
+  <img src="https://img.shields.io/badge/Fusion 360-00FFFF?style=for-the-badge&logo=Autodesk&logoColor=black" alt="Fusion 360"/>
 </p>
 
 ---
