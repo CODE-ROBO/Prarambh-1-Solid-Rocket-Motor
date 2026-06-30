@@ -5,7 +5,7 @@
   <br>
   <img src="https://img.shields.io/badge/OpenMotor-8B0000?style=for-the-badge&logo=rocket&logoColor=white" alt="OpenMotor"/>
   <img src="https://img.shields.io/badge/Ansys-8B0000?style=for-the-badge&logo=Ansys&logoColor=white" alt="Ansys"/>
-  <img src="https://img.shields.io/badge/Design For Manufacturing-00FFFF?style=for-the-badge&logo=DFM&logoColor=black" alt="DFM"/>
+  <img src="https://img.shields.io/badge/Design For Manufacturing-8B0000?style=for-the-badge&logo=DFM&logoColor=white" alt="DFM"/>
   <img src="https://img.shields.io/badge/MATLAB-FFD700?style=for-the-badge&logo=mathworks&logoColor=black" alt="MATLAB"/>
   <img src="https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=black" alt="Python"/>
   <img src="https://img.shields.io/badge/Fusion_360-00FFFF?style=for-the-badge&logo=Autodesk&logoColor=black" alt="Fusion 360"/>
