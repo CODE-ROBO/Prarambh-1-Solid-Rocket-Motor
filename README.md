@@ -50,7 +50,7 @@ By rejecting purely theoretical assumptions, the internal ballistics were valida
 ### <a id="datasheet"></a>📋 SYSTEM DATASHEET & ENGINEERING TARGETS
 
 <div align="justify">
-The architecture bridges the critical gap between theoretical thermodynamic modeling, multiphysics flight simulation, and empirical data validation.
+The architecture bridges the critical gap between theoretical thermodynamic modeling, multiphysics flight simulation, and empirical data validation:
 </div>
 
 | Subsystem | Specification | Engineering Objective |
