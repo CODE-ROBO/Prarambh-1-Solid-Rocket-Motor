@@ -11,6 +11,7 @@
   <img src="https://img.shields.io/badge/Fusion_360-00FFFF?style=for-the-badge&logo=Autodesk&logoColor=black" alt="Fusion 360"/>
   <img src="https://img.shields.io/badge/KiCad-00FFFF?style=for-the-badge&logo=KiCad&logoColor=black" alt="KiCad"/>
   <img src="https://img.shields.io/badge/Microsoft Office-00FFFF?style=for-the-badge&logo=MicrosoftOffice&logoColor=black" alt="Microsoft Office"/>
+   <img src="https://img.shields.io/badge/Design For Manufacturing-8B0000?style=for-the-badge&logo=DFM&logoColor=white" alt="DFM"/>
 </p>
 
 <p align="center">
