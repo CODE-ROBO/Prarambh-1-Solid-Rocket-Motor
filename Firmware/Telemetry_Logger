@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+"""
+Prarambh-1: Real-Time Telemetry Logging & DSP Processing Pipeline
+Ingests raw CSV serial telemetry from static test stand, isolates mechanical
+vibrations via Butterworth filtering, and integrates Total Impulse & Isp.
+"""
+
+import sys
+import serial
+import numpy as np
+import pandas as pd
+from scipy import signal
+
+def process_static_fire_dataset(csv_path: str, propellant_mass_kg: float = 0.320):
+    print(f"[INFO] Ingesting static fire record: {csv_path}")
+    df = pd.read_csv(csv_path, names=["timestamp_us", "thrust_n", "pressure_bar"])
+    
+    # Normalize time vector to seconds starting at 0
+    t_sec = (df["timestamp_us"] - df["timestamp_us"].iloc[0]) / 1e6
+    thrust_raw = df["thrust_n"].to_numpy()
+    pressure_raw = df["pressure_bar"].to_numpy()
+
+    # Sampling properties
+    dt = np.mean(np.diff(t_sec))
+    fs = 1.0 / dt
+    print(f"[INFO] Detected Sampling Frequency: {fs:.1f} Hz (dt = {dt*1e3:.2f} ms)")
+
+    # 1. Digital Signal Processing: 4th-Order Zero-Phase Butterworth Low-Pass Filter
+    cutoff_hz = 25.0 # Attenuates test stand frame harmonics >25Hz
+    nyq = 0.5 * fs
+    b, a = signal.butter(4, cutoff_hz / nyq, btype="low")
+    thrust_filtered = signal.filtfilt(b, a, thrust_raw)
+    pressure_filtered = signal.filtfilt(b, a, pressure_raw)
+
+    # Threshold active burn window (> 2.0 N)
+    active_indices = np.where(thrust_filtered >= 2.0)[0]
+    if len(active_indices) == 0:
+        print("[ERROR] No valid burn signature found above threshold.")
+        return
+
+    burn_start_idx = active_indices[0]
+    burn_end_idx = active_indices[-1]
+
+    t_burn = t_sec.iloc[burn_end_idx] - t_sec.iloc[burn_start_idx]
+    
+    # 2. Numerical Integration (Trapezoidal Rule) for Total Impulse (It)
+    total_impulse_ns = np.trapz(thrust_filtered[burn_start_idx:burn_end_idx], 
+                                x=t_sec.iloc[burn_start_idx:burn_end_idx])
+    
+    # 3. Specific Impulse (Isp) Calculation
+    g0 = 9.80665
+    isp_seconds = total_impulse_ns / (propellant_mass_kg * g0)
+    peak_thrust_n = np.max(thrust_filtered)
+    avg_thrust_n = total_impulse_ns / t_burn
+    peak_pressure_bar = np.max(pressure_filtered)
+
+    print("=========================================================================")
+    print("           PRARAMBH-1 SOLID MOTOR EMPIRICAL BALLISTICS SUMMARY           ")
+    print("=========================================================================")
+    print(f"Propellant Formulation           : 64% KNO3 / 35% Sorbitol / 1% Fe2O3")
+    print(f"Total Propellant Mass (mp)       : {propellant_mass_kg * 1000.0:.1f} g")
+    print(f"Burn Duration (tb)               : {t_burn:.3f} s")
+    print(f"Peak Thrust (F_max)              : {peak_thrust_n:.2f} N")
+    print(f"Average Thrust (F_avg)           : {avg_thrust_n:.2f} N")
+    print(f"Peak Chamber Pressure (Pc_max)   : {peak_pressure_bar:.2f} bar ({peak_pressure_bar * 14.5038:.1f} psi)")
+    print(f"Total Impulse (It)               : {total_impulse_ns:.2f} N·s")
+    print(f"Delivered Specific Impulse (Isp) : {isp_seconds:.2f} s")
+    print("=========================================================================")
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        process_static_fire_dataset(sys.argv[1])
+    else:
+        # Generate synthetic static fire demonstration data
+        t = np.linspace(0, 2.5, 1250)
+        thrust_syn = 280.0 * np.sin(np.pi * t / 2.0)**0.3 + np.random.normal(0, 12.0, len(t))
+        thrust_syn = np.clip(thrust_syn, 0, None)
+        df_demo = pd.DataFrame({"timestamp_us": t * 1e6, "thrust_n": thrust_syn, "pressure_bar": thrust_syn / 7.2})
+        df_demo.to_csv("demo_static_fire.csv", index=False, header=False)
+        process_static_fire_dataset("demo_static_fire.csv")
