@@ -1,0 +1,11 @@
+Item No,Subsystem,Part Name / Model,Manufacturer,Specifications / Rating,Qty,Reference Designator
+1,Sensing,S-Type Load Cell 100kg,CZL301A / Interface,100 kg (980.6 N) Rated Capacity 2.0 mV/V 0.03% FS,1,LC1
+2,Sensing,Flush Pressure Transmitter,Keller / WIKA A-10,0-100 bar (0-1450 psi) 0.5-4.5V ratiometric G1/4 port,1,PT1
+3,Signal Conditioning,24-bit Delta-Sigma ADC,TI ADS1220 / HX711,24-bit SPI interface Low-noise programmable gain amp,1,ADC1
+4,Processing,High-Rate DAQ Microcontroller,Teensy 4.0 / STM32F401,32-bit ARM Cortex-M7 600MHz USB-CDC Serial,1,MCU1
+5,Ignition,Optocoupler Isolator,Lite-On 4N35,5000Vrms isolation 10mA forward current,2,OPTO1-OPTO2
+6,Ignition,N-Channel Power MOSFET,IRFZ44N,55V 49A Rds(on)=17.5mOhm TO-220,1,Q_IGN1
+7,Ignition,Industrial Safety Key Switch,Schneider Electric XB4BG21,2-Position Maintained 1NO Key Removal Left,2,KEY1-KEY2
+8,Power,Bench Power Supply 12V,Mean Well LRS-100-12,12V DC 8.5A 102W single output,1,PSU1
+9,Power,Precision Ultra-Low Noise LDO,TI LP5907,5.0V output 250mA 6.5uVrms noise floor,1,U_REG1
+10,Containment,Die-Cast Aluminum Enclosure,Hammond 1590BB,119 x 94 x 34 mm EMI/RFI Shielded Box,1,ENC1
