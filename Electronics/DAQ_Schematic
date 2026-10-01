@@ -1,0 +1,28 @@
+# Prarambh-1: High-Speed Static Fire DAQ & Ignition Interconnect
+
+### 1. Instrumentation Overview
+* **Primary Thrust Channel:** S-Type 100 kg (980.6 N) alloy-steel strain gauge load cell arranged in a full Wheatstone bridge.
+* **Chamber Pressure Channel:** Piezoresistive industrial pressure transmitter ($0\text{--}100\text{ bar}$, $4\text{--}20\text{ mA}$ current loop or $0.5\text{--}4.5\text{ V}$ ratiometric output).
+* **ADC Resolution:** 24-bit Delta-Sigma ($\Delta\Sigma$) analog-to-digital converter (ADS1220 / HX711) sampled at $80\text{ Hz}$ minimum ($1\text{ kHz}$ SPI burst capability).
+* **Galvanic Isolation:** Optocoupled remote ignition circuit with dual physical keyswitches and hardware continuity test LED.
+
+---
+
+### 2. Functional Wiring & Interconnect Architecture
+
+```text
+  [ 230V AC / 12V 5A Bench PSU ]
+                │
+                ├──► [ 12V High-Current Ignition Bus ] ──► Dual Safety Key ──► Relays / High-Side MOSFET ──► E-Match
+                │
+                └──► [ Isolated 5V Low-Noise Analog Buck ]
+                            │
+                            ├──► Wheatstone Load Cell (E+ / E-)
+                            │         │
+                            │         └──► Differential Sense (A+ / A-) ──► 24-bit ADC ──┐
+                            │                                                             │ (SPI / UART)
+                            ├──► Pressure Transducer (100 bar) ───────────────────────────┼──► DAQ Microcontroller
+                            │                                                             │    (Teensy / STM32)
+                            └──► Solid-State Optocoupler (4N35) ──────────────────────────┘           │
+                                      │                                                               ▼
+                                      └◄────────────────── Hardware Remote Fire Trigger ◄──── [ Isolated Host PC ]
