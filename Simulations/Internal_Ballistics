@@ -1,0 +1,139 @@
+%% =========================================================================
+%  PRARAMBH-1: SOLID ROCKET MOTOR INTERNAL BALLISTICS SIMULATION ENGINE
+%  Formulation: Saint Robert's Regression Law + BATES Core Geometry Evolution
+%  Propellant: KNSB (65% KNO3 / 35% Sorbitol)
+% =========================================================================
+clear; clc; close all;
+
+%% 1. PROPELLANT THERMOCHEMISTRY & COMBUSTION CONSTANTS
+rho_p     = 1841.0;         % Propellant bulk density (kg/m^3)
+c_star    = 895.0;          % Characteristic exhaust velocity c* (m/s)
+gamma     = 1.137;          % Ratio of specific heats (combustion products)
+T0        = 1720.0;         % Chamber flame temperature (K)
+R_gas     = 360.5;          % Specific gas constant J/(kg*K)
+
+% Saint Robert's Burn Rate Parameters: r = a * (Pc)^n
+% Pc in MPa, r in mm/s
+a_coeff   = 8.25;           % Burn rate coefficient (mm / (s * MPa^n))
+n_exp     = 0.319;          % Pressure exponent (dimensionless)
+
+%% 2. BATES GRAIN & MOTOR GEOMETRY (3 Grains in Series)
+num_grains    = 3;
+L_grain_init  = 0.055;      % Length per grain: 55 mm (m)
+D_outer       = 0.048;      % Outer diameter: 48 mm (m)
+D_core_init   = 0.014;      % Initial core diameter: 14 mm (m)
+R_outer       = D_outer / 2.0;
+
+% Inhibited outer circumference, uninhibited grain ends and core
+% Initial burn surface area Ab0
+A_core_0  = pi * D_core_init * L_grain_init * num_grains;
+A_ends_0  = 2 * num_grains * (pi * (R_outer^2 - (D_core_init/2.0)^2));
+Ab0       = A_core_0 + A_ends_0;
+
+% Nozzle Dimensions (Graphite Divergent Nozzle)
+D_throat  = 0.0092;         % Throat diameter: 9.2 mm (m)
+A_throat  = pi * (D_throat / 2.0)^2; % m^2
+D_exit    = 0.0210;         % Exit diameter: 21.0 mm (m)
+A_exit    = pi * (D_exit / 2.0)^2;   % m^2
+exp_ratio = A_exit / A_throat;
+
+P_ambient = 101325.0;       % Ambient atmospheric pressure (Pa)
+
+%% 3. TRANSIENT SIMULATION LOOP
+dt        = 0.001;          % 1 ms integration step
+t_max     = 3.0;
+time      = 0:dt:t_max;
+N         = length(time);
+
+% State arrays
+P_c       = zeros(1, N);    % Chamber pressure (Pa)
+Thrust    = zeros(1, N);    % Thrust output (N)
+web_burn  = zeros(1, N);    % Web distance burned (m)
+burn_rate = zeros(1, N);    % Linear regression rate (m/s)
+
+% Initial conditions
+P_c(1)    = P_ambient;
+w_burned  = 0.0;
+max_web   = (D_outer - D_core_init) / 2.0;
+
+fprintf('Simulating internal ballistics for Prarambh-1 BATES core...\n');
+
+for k = 1:N-1
+    if w_burned >= max_web
+        break; % Web burnout reached
+    end
+    
+    % Current Chamber Pressure in MPa for Saint Robert's law
+    Pc_MPa = max(0.1, P_c(k) / 1e6);
+    
+    % Linear burn rate r (m/s)
+    r = (a_coeff * (Pc_MPa^n_exp)) / 1000.0;
+    burn_rate(k) = r;
+    
+    % Update geometry
+    w_burned = w_burned + r * dt;
+    web_burn(k+1) = w_burned;
+    
+    D_core_t = D_core_init + 2.0 * w_burned;
+    L_grain_t = max(0.0, L_grain_init - 2.0 * w_burned);
+    
+    % Active burning area Ab(t)
+    Ab_core = pi * D_core_t * L_grain_t * num_grains;
+    Ab_ends = 2 * num_grains * max(0.0, pi * (R_outer^2 - (D_core_t/2.0)^2));
+    Ab_t    = Ab_core + Ab_ends;
+    
+    % Mass generated vs. mass discharged through nozzle
+    m_dot_gen = rho_p * Ab_t * r;
+    
+    % Choked nozzle flow equation: m_dot_noz = (Pc * At) / c*
+    % Transient equilibrium pressure equation:
+    % Pc_equilibrium = ( (rho_p * Ab_t * a * c*) / At )^(1 / (1 - n))
+    Pc_equilibrium = ( (rho_p * Ab_t * (a_coeff/1000.0) * ((1e-6)^n_exp) * c_star) / A_throat )^(1.0 / (1.0 - n_exp));
+    
+    % 1st Order Relaxation into equilibrium chamber pressure
+    tau_chamber = 0.008; % 8 ms filling constant
+    P_c(k+1) = P_c(k) + (dt / tau_chamber) * (Pc_equilibrium - P_c(k));
+    
+    % Thrust Coefficient Cf
+    P_ratio = P_ambient / P_c(k+1);
+    Cf = sqrt( (2*gamma^2 / (gamma-1)) * (2/(gamma+1))^((gamma+1)/(gamma-1)) * ...
+               max(0.0, 1.0 - (P_ratio)^((gamma-1)/gamma)) ) + (P_ratio - (P_ambient/P_c(k+1))) * exp_ratio;
+    
+    % Output instantaneous thrust
+    Thrust(k+1) = Cf * P_c(k+1) * A_throat;
+end
+
+%% 4. PERFORMANCE INTEGRATION
+t_active = time(1:k);
+F_active = Thrust(1:k);
+Pc_active = P_c(1:k) / 1e5; % Convert to Bar
+
+total_impulse = trapz(t_active, F_active);
+prop_mass = num_grains * rho_p * (pi * (R_outer^2 - (D_core_init/2)^2) * L_grain_init);
+Isp = total_impulse / (prop_mass * 9.80665);
+
+fprintf('===================================================================\n');
+fprintf('         PRARAMBH-1 NUMERICAL SIMULATION RESULTS                   \n');
+fprintf('===================================================================\n');
+fprintf('Calculated Propellant Mass  : %.3f kg (%.1f g)\n', prop_mass, prop_mass * 1000);
+fprintf('Total Burn Time             : %.3f s\n', t_active(end));
+fprintf('Peak Chamber Pressure       : %.2f bar (%.1f psi)\n', max(Pc_active), max(Pc_active)*14.5038);
+fprintf('Peak Thrust                 : %.2f N\n', max(F_active));
+fprintf('Total Impulse (It)          : %.2f N·s\n', total_impulse);
+fprintf('Calculated Specific Impulse : %.2f s\n', Isp);
+fprintf('===================================================================\n');
+
+%% 5. PLOTTING
+figure('Color', [0.1 0.1 0.1], 'Position', [100, 100, 1000, 500]);
+
+subplot(1, 2, 1);
+plot(t_active, F_active, 'Color', [0 1 1], 'LineWidth', 2.2); grid on;
+title('Simulated Motor Thrust Curve F(t)', 'Color', 'w');
+xlabel('Time (s)', 'Color', 'w'); ylabel('Thrust (N)', 'Color', 'w');
+set(gca, 'Color', [0.15 0.15 0.15], 'XColor', 'w', 'YColor', 'w');
+
+subplot(1, 2, 2);
+plot(t_active, Pc_active, 'Color', [1 0.3 0.3], 'LineWidth', 2.2); grid on;
+title('Chamber Pressure Profile P_c(t)', 'Color', 'w');
+xlabel('Time (s)', 'Color', 'w'); ylabel('Chamber Pressure (bar)', 'Color', 'w');
+set(gca, 'Color', [0.15 0.15 0.15], 'XColor', 'w', 'YColor', 'w');
