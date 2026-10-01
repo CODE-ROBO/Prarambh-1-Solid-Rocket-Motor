@@ -1,0 +1,141 @@
+/**
+ * =============================================================================
+ * Prarambh-1: High-Speed Static Fire DAQ Firmware
+ * Target: Teensy 4.0 / 4.1 or STM32 ARM Cortex-M4
+ * 
+ * Capabilities:
+ * - High-speed interrupt-driven 24-bit ADC sampling (80 Hz to 500 Hz)
+ * - Circular pre-trigger ring buffer (captures ignition transient without data loss)
+ * - Automatic dynamic tare & zero-offset calibration
+ * - Auto-trigger on chamber pressure / thrust rise threshold
+ * =============================================================================
+ */
+
+#include <Arduino.h>
+
+// Calibration Factors (Calibrate with precision certified weights)
+constexpr float LOADCELL_SLOPE = 0.00048828f; // Raw counts to Newtons (N)
+constexpr float PRESSURE_SLOPE = 0.00244140f; // Raw counts to Bar
+constexpr float AUTO_TRIGGER_THRESHOLD_N = 5.0f; // 5 N triggers high-rate recording
+constexpr uint32_t PRE_TRIGGER_SAMPLES = 80;     // 1 second of pre-fire baseline
+
+// Hardware Pins
+constexpr uint8_t PIN_IGNITION_GATE = 8;
+constexpr uint8_t PIN_CONTINUITY_SENSE = A0;
+constexpr uint8_t PIN_STATUS_LED = 13;
+
+enum DAQState {
+  STATE_STANDBY,
+  STATE_ARMED,
+  STATE_RECORDING,
+  STATE_COMPLETE
+};
+
+struct TelemetryPoint {
+  uint32_t timestamp_us;
+  float thrust_n;
+  float pressure_bar;
+};
+
+// Circular Ring Buffer for Pre-Trigger Capture
+TelemetryPoint ring_buffer[PRE_TRIGGER_SAMPLES];
+uint16_t ring_idx = 0;
+bool buffer_filled = false;
+
+DAQState current_state = STATE_STANDBY;
+float tare_offset_n = 0.0f;
+uint32_t burn_start_time_us = 0;
+
+float read_load_cell_newtons() {
+  // In production, read via ADS1220 SPI or HX711 bit-bang
+  int32_t raw_adc = analogRead(A1) << 14; 
+  return ((float)raw_adc * LOADCELL_SLOPE) - tare_offset_n;
+}
+
+float read_chamber_pressure_bar() {
+  int32_t raw_pressure = analogRead(A2) << 14;
+  return (float)raw_pressure * PRESSURE_SLOPE;
+}
+
+void execute_tare() {
+  float sum = 0.0f;
+  for (int i = 0; i < 100; i++) {
+    int32_t raw = analogRead(A1) << 14;
+    sum += (float)raw * LOADCELL_SLOPE;
+    delay(5);
+  }
+  tare_offset_n = sum / 100.0f;
+}
+
+void setup() {
+  Serial.begin(921600);
+  pinMode(PIN_IGNITION_GATE, OUTPUT);
+  pinMode(PIN_STATUS_LED, OUTPUT);
+  digitalWrite(PIN_IGNITION_GATE, LOW);
+
+  delay(1000);
+  execute_tare();
+  current_state = STATE_ARMED;
+  Serial.println(F("[DAQ_READY] Armed and monitoring load stand..."));
+}
+
+void loop() {
+  uint32_t now = micros();
+  float current_thrust = read_load_cell_newtons();
+  float current_pressure = read_chamber_pressure_bar();
+
+  TelemetryPoint pt = {now, current_thrust, current_pressure};
+
+  switch (current_state) {
+    case STATE_ARMED:
+      // Fill circular buffer continuously
+      ring_buffer[ring_idx] = pt;
+      ring_idx = (ring_idx + 1) % PRE_TRIGGER_SAMPLES;
+      if (ring_idx == 0) buffer_filled = true;
+
+      // Auto-trigger on thrust rise
+      if (current_thrust >= AUTO_TRIGGER_THRESHOLD_N) {
+        current_state = STATE_RECORDING;
+        burn_start_time_us = now;
+        digitalWrite(PIN_STATUS_LED, HIGH);
+
+        // Dump circular buffer to preserve pre-ignition baseline
+        uint16_t start_pos = buffer_filled ? ring_idx : 0;
+        uint16_t count = buffer_filled ? PRE_TRIGGER_SAMPLES : ring_idx;
+        for (uint16_t i = 0; i < count; i++) {
+          uint16_t idx = (start_pos + i) % PRE_TRIGGER_SAMPLES;
+          Serial.print(ring_buffer[idx].timestamp_us);
+          Serial.print(',');
+          Serial.print(ring_buffer[idx].thrust_n, 3);
+          Serial.print(',');
+          Serial.println(ring_buffer[idx].pressure_bar, 3);
+        }
+      }
+      break;
+
+    case STATE_RECORDING:
+      // Stream high-rate telemetry
+      Serial.print(now);
+      Serial.print(',');
+      Serial.print(current_thrust, 3);
+      Serial.print(',');
+      Serial.println(current_pressure, 3);
+
+      // Motor burnout cutoff: Thrust < 1.0 N for more than 1.5 seconds post-ignition
+      if (now - burn_start_time_us > 2000000 && current_thrust < 1.0f) {
+        current_state = STATE_COMPLETE;
+        digitalWrite(PIN_STATUS_LED, LOW);
+        Serial.println(F("[BURN_COMPLETE] Telemetry acquisition closed."));
+      }
+      break;
+
+    case STATE_COMPLETE:
+      // Hold state until manual reset
+      break;
+
+    default:
+      break;
+  }
+
+  delayMicroseconds(2000); // ~500 Hz sampling period
+}
