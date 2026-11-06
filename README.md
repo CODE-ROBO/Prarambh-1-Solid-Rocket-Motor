@@ -17,7 +17,7 @@
   <img src="https://via.placeholder.com/800x400/0a0a0a/00FFFF?text=[INSERT+STATIC+FIRE+GIF+OR+CAD+RENDER+HERE]" alt="Prarambh-1 Hardware Render" width="100%"/>
 </p>
 
--
+
 
 <details open>
   <summary><b>📑 DIRECTORY TERMINAL (TABLE OF CONTENTS)</b></summary>
